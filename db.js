@@ -1,29 +1,32 @@
-const mongoose=require('mongoose');  // use to impoprt mongoose and also install npm i mongoose
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-// mongo db url
-const mongoURL = 'mongodb://localhost:27017/hotels'
+// const mongoURL=process.env.MONGODB_URL_LOCAL
 
-// setup mongodb connection
-mongoose.connect(mongoURL);
+// Setup MongoDB connection
+const db = mongoose.connect(process.env.MONGODB_URL)
+.then(()=>{
+  console.log('database is connected successfully');
+})
+.catch(()=>{
+  console.log('database is not connected successfully');
+})
 
+// Get the default connection
+// const db = mongoose.connection;
 
-// get the default connectinon
-// mongoose manage the default connecton between object representing the mongodb connection
-const db=mongoose.connection;
+// // Define event listeners
+// db.on('connected', () => {
+//   console.log('Connected to the MongoDB server');
+// });
 
-// define event listner  [connected , error , disconnected => these all are event listner] for database connetion
-// jasie hi mongodb ke sath connet ho  masage show ho
-db.on('connected',()=>{   // jaise hi mongodb hamara servere ke sath connected ho jayega  ye masage show karega
-    console.log('connected to the mongodb  server')
-});
+// db.on('error', (err) => {
+//   console.error('MongoDB connection error:', err);
+// });
 
-db.on('error',()=>{   // jaise hi mongodb hamara servere ke sath connected ho jayega  ye masage show karega
-    console.error('mongodb connection error' , err)
-});
+// db.on('disconnected', () => { // Changed from 'close' to 'disconnected'
+//   console.log('MongoDB disconnected');
+// });
 
-db.on('disconnected',()=>{ // jaise hi mongodb hamara servere ke sath connected ho jayega  ye masage show karega
-    console.log(' mongodb disconnected')
-});
-
-// export the connection here below db represent the mongodb connection
-module.exports=db; // this db.js ko hum import krenge exprs.js se for that we import this db in exprs.js
+// Export the connection
+module.exports = db;

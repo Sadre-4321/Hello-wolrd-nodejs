@@ -1,6 +1,7 @@
 const express = require('express') 
 const app = express();
 const db=require('./db');
+require('dotenv').config();
 // without body parser client cannot post their data format 
 // so we require body-parser
 const bodyParser=require('body-parser');
@@ -9,7 +10,17 @@ app.use(bodyParser.json());
 // const person=require('./models/person'); this will import in personRoutes.js
 // const MenuItems=require('./models/MenuItems')
 
-app.get('/', function (res,req ) {
+
+// hotel mnagement application
+// Middileware function define [ our middile ware function handled by Api]
+const logRequest=(req,res)=>{
+  console.log(`${new Date().toLocaleString} Request made to :${req.originalUrl}`);
+  next(); // move on the next pahse
+}
+
+
+// here we pass our middileware
+app.get('/', logRequest,function (res,req ) {
   res.send('hey ! welcome to my new hotel akib khan .. And how can i help you?')
 })
 
@@ -101,7 +112,7 @@ const menuRoutes = require('./routes/menuRoutes');// use the routes
 app.use('/person',personRoutes);
 app.use('/menu', menuRoutes);
 
-
-app.listen(3000 , ()=>{
-    console.log('server is on 3000 port')
+const PORT=process.env.PORT || 5001;
+app.listen(PORT , ()=>{
+    console.log('server is on 5001 port')
 })
